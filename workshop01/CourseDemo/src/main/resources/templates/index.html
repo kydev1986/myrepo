@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Course Demo</title>
+</head>
+
+<body>
+	
+	<table>
+		<thead>
+			<tr>
+				<th><img th:src="@{icon.jfif}" width="40" height="40" alt="icon.jpg"/></th>
+				<th><h1 style="text-align:left;" th:text="${theText}"/></th>
+			</tr>
+		</thead>
+	
+	</table>
+	<h2 style="text-align:center;">Repository <a th:href="@{https://github.com/kydev1986/myrepo}">link</a></h2>
+	
+</body>
+
+</html>
