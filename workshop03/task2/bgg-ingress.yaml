@@ -1,0 +1,32 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bggapp-ing
+  annotations: 
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+spec:
+  ingressClassName: nginx
+  defaultBackend:
+    service:
+      name: default-backend-svc
+      port:
+        number: 3000
+  rules:
+    - host: bgg-157.230.194.142.nip.io
+      http:
+        paths:
+          - path: /v1
+            pathType: Prefix
+            backend:
+              service:
+                name: bggappv1-svc
+                port:
+                  number: 80
+          - path: /v2
+            pathType: Prefix
+            backend:
+              service:
+                name: bggappv2-svc
+                port:
+                  number: 80
