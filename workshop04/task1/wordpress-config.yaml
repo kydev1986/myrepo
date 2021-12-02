@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+   name: wordpressapp-cm
+   labels:
+      name: wordpressapp-cm
+data:
+  WORDPRESS_DB_HOST: wordpressdb-cluster-mysql-master
+  WORDPRESS_DB_NAME: wordpressdb-database
+  WORDPRESS_DB_USER: root
+---
+apiVersion: v1
+kind: Secret
+metadata:
+   name: wordpressapp-secret
+   labels:
+      name: wordpressapp-secret
+data:
+   WORDPRESS_DB_PASSWORD: Y2hhbmdlaXQ=
+---
+apiVersion: v1
+kind: Secret
+metadata:
+   name: wordpressdb-secret
+   labels:
+      name: wordpressdb-secret
+data:
+   ROOT_PASSWORD: Y2hhbmdlaXQ=

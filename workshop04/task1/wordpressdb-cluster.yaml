@@ -1,0 +1,29 @@
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+   name: wordpressdb-cluster
+   labels:
+      name: wordpressdb-cluster
+spec:
+   replicas: 2
+   secretName: wordpressdb-secret
+   mysqlVersion: "5.7"
+   volumeSpec:
+      persistentVolumeClaim:
+         accessModes:
+         - ReadWriteOnce
+         storageClassName: do-block-storage 
+         resources:
+            requests:
+               storage: 1Gi
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlDatabase
+metadata:
+   name: wordpressdb-database
+spec:
+   database: wordpressdb-database
+   clusterRef:
+      name: wordpressdb-cluster
+      namespace: wordpress-ns

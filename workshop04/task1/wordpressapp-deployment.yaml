@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: wordpressapp-deploy
+   labels:
+      name: wordpressapp-deploy
+spec:
+   replicas: 1
+   selector:
+      matchLabels:
+         name: wordpressapp-pod
+   strategy:
+      type: RollingUpdate
+      rollingUpdate:
+         maxSurge: 25%
+         maxUnavailable: 25%
+   template:
+      metadata:
+         name: wordpressapp-pod
+         labels:
+            name: wordpressapp-pod
+      spec:
+         containers:
+         - name: wordpressapp-container
+           image: wordpress:5.8-apache
+           imagePullPolicy: IfNotPresent
+           envFrom:
+             - configMapRef:
+                 name: wordpressapp-cm
+             - secretRef:
+                 name: wordpressapp-secret
+           ports:
+             - containerPort: 80   
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpressapp-svc
+  labels:
+      name: wordpressapp-svc
+spec:
+  type: ClusterIP
+  selector:
+    name: wordpressapp-pod
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+   name: wordpressapp-ing
+   labels:
+      name: wordpressapp-ing
+   annotations:
+      nginx.ingress.kubernetes.io/limit-connections: "5"
+
+spec:
+   ingressClassName: nginx
+   rules:
+   - host: wp-157.230.194.142.nip.io
+     http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+             service:
+                name: wordpressapp-svc
+                port:
+                   number: 80
